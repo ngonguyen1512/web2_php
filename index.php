@@ -1,109 +1,58 @@
-<div class="slideshow">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script>
-        $(function(){
-            $('.fadein img:gt(0)').hide();
-            setInterval(function(){$('.fadein :first-child').fadeOut().next('img').fadeIn().end().appendTo('.fadein');}, 3000);
-        });
-    </script>
-    <div class="fadein">
-        <?php 
-            $dir = "./image/slider/";
-            $scan_dir = scandir($dir);
-            foreach($scan_dir as $img):
-                if(in_array($img,array('.','..')))
-                    continue;
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="./css/styleadmin.css" rel="stylesheet">
+        <link href="./css/stylead2.css" rel="stylesheet2">
+        <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+        <title>AdminShop</title>
+    </head>
+    <?php
+        include './connect_db.php';
+        session_start();
+        if(!isset($_SESSION['dangnhap'])){
+            header('Location:login.php');
+        }
+    ?>
+    <body>
+        <div class="wrapper">
+            <?php include './pages/header.php'; ?>
+        </div>
+        <div class="sidebar-main">
+            <div class="sidebar">
+            <?php
+                if(isset($_SESSION['dangnhap'])){ 
+                    $taikhoan = $_SESSION['dangnhap'];
+                    $sql1 = "SELECT * FROM `nhanvienn` WHERE `ten_nv` = '$taikhoan' AND `id_quyen` = 'ql'";
+                    $row1 = mysqli_query($con, $sql1);
+                    $sql2 = "SELECT * FROM `nhanvienn` WHERE `ten_nv` = '$taikhoan' AND `id_quyen` = 'nv'";
+                    $row2 = mysqli_query($con, $sql2);
+                    if($count1 = mysqli_fetch_array($row1)){
+                        include './pages/sidemenuql.php';
+                    } else if($count2 = mysqli_fetch_array($row2)) {
+                        include './pages/sidemenunv.php';
+                    }else {
+                        include './pages/sidemenu.php';
+                    }
+                }
             ?>
-            <img src="<?php echo $dir.$img ?>" alt="<?php echo $img ?>">
-        <?php endforeach; ?>
-    </div>
-</div>
-<?php
-    include './connect_db.php';
-    $result = mysqli_query($con, "SELECT * FROM `newproduct` WHERE `idnewsp` <= '5'");
-    $result1 = mysqli_query($con, "SELECT * FROM `newproduct` WHERE `idnewsp` > '5'");
-    mysqli_close($con);
-?>
-<div class="dbsp">
-    <h1>Sản phẩm nổi bật</h1>
-    <ul class="product_list">
-    <?php 
-        while($row = mysqli_fetch_array($result)){   
-            echo'<li><a href = "index.php?quanly=sanpham&quanly=ctsp&idsp='.$row['idsp'].'">';
-            echo '<img src = "'.$row['hinhanh'].'"><br><p class="title_product">'.$row['tensp'].'</p><br>
-            <p class="price_product">'. number_format($row['dongia']) .' vnd</p><a class="addcart" href="index.php?quanly=sanpham&quanly=themgiohang&idsp='.$row['idsp'].'">Thêm vào giỏ hàng';
-            echo '</a></li>';
-        }
-    ?>
-    </ul>
-</div>
-<div class="newsp">
-    <h1>Sản phẩm mới</h1>
-    <ul class="product_new"> 
-    <?php 
-        while($row1 = mysqli_fetch_array($result1)){   
-            echo'<li><a href = "index.php?quanly=sanpham&quanly=ctsp&idsp='.$row1['idsp'].'">';
-            echo '<img src = "'.$row1['hinhanh'].'"><br><p class="title_product">'.$row1['tensp'].'</p><br>
-            <p class="price_product">'. number_format($row1['dongia']) .' vnd</p><a class="addcart" href="index.php?quanly=sanpham&quanly=themgiohang&idsp='.$row1['idsp'].'">Thêm vào giỏ hàng';
-            echo '</a></li>';
-        }
-    ?>
-    </ul>
-</div> 
-<style>
-    .dbsp, 
-    .dbsp {
-        list-style: none;
-    }
-    .dbsp li,
-    .newsp li{
-        width: 20%;
-        height: auto;
-        border: 1px solid black;
-        border-radius: 10px;
-        margin: 10px;
-        float: left;
-        padding: 5px;
-        background-color: #f2f2f2;
-        align-content: center;
-        justify-content: center;
-        height: 330px;
-    }
-    .dbsp li img,
-    .newsp li img{
-        width: 100%;
-        height: 70%;
-    }
-    .dbsp li a,
-    .newsp li a{
-        text-decoration: none;
-    }
-    .dbsp .addcart,
-    .newsp .addcart{
-        color: black;
-        font-size: 15px;
-        border:1px solid black;
-        padding:3px;
-        background-color: yellow;
-        border-radius: 10px;
-        margin: 0 0 0 16%;
-    }
-    .dbsp .title_product,
-    .newsp .title_product {
-        text-decoration: none;
-        text-align: center;
-        color: black;
-        font-size: 16px;
-        font-weight: bold;
-        margin-top:0;
-    }
-    .dbsp .price_product,
-    .newsp .price_product {
-        margin-top: -10px;
-        text-decoration: none;
-        text-align: center;
-        color: red;
-        font-size: 16px;
-        font-weight: bold;
-    }
-</style>
+            </div>
+            <div class="main">
+                <?php include './pages/main.php'; ?>
+                
+            </div>
+            <!-- <h1 class="title_admin">Chào mừng bạn đến với WebAdmin</h1> -->
+        </div>
+        <!-- <style>
+            h1{
+                text-align: center;
+            }
+        </style> -->
+        
+    </body>
+</html>

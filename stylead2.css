@@ -1,0 +1,46 @@
+.wapper_login {
+    width: 25%;
+    align-items: center;
+    margin: 16% auto;
+    /* background-color: blueviolet; */
+    /* background-image: url("https://daynitda.com/wp-content/uploads/2021/03/shop-giay-da-nang.jpg"); */
+    /* border-radius: 5px; */
+}
+/* form{
+    border: 1px solid black;
+    border-radius: ;
+} */
+h3{
+    /* margin: 5%; */
+    font-size: 24px;
+}
+table , th, td{
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-radius: 12px;
+}
+table.table-login{
+    width:100%;
+}
+.table-login {
+    text-align: center;
+}
+table.table-login tr td{
+    padding: 5px;
+}
+.box_acc {
+    position: fixed;
+    
+    border: 1px solid black;
+    width: 8%;
+    right: 8%;
+    border-radius: 5px;
+    text-align: center;
+    display: none;
+}
+.wapper_losign {
+    width: 50%;
+    align-items: center;
+    
+    /* border-radius: 5px; */
+}

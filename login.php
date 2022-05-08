@@ -2,18 +2,22 @@
     session_start();
     include './connect_db.php';
     
-    if(isset($_POST['dangnhapweb'])) {
+    if(isset($_POST['dangnhap'])) {
+        $status = $_GET['status'];
         $taikhoan = $_POST['username'];
-        $idkh = $_GET['id_user'];
         $matkhau = MD5($_POST['password']);
-        $sql = "SELECT * FROM `user` WHERE `ten_user` = '".$taikhoan."'  AND `pass` = '".$matkhau."' ";
-        $row = mysqli_query($con, $sql);
-        $count = mysqli_num_rows($row);
-        if($count>0){
-            $_SESSION['dangnhapweb'] = $taikhoan;
-            header("Location: ./index.php");
+        $id_quyen = $_GET['id_quyen'];
+        $statuss = $_GET['statuss'];
+        $sql1 = "SELECT * FROM `admin`,`nhanvienn` WHERE `ten_admin` = '$taikhoan' AND  `status` = '1' AND `password` = '$matkhau' OR `ten_nv` = '$taikhoan' AND  `status` = '1' AND `pass` = '$matkhau'";
+        $row1 = mysqli_query($con, $sql1);
+        $count1 = mysqli_num_rows($row1);
+        if($count1>0){
+            $_SESSION['dangnhap'] = $taikhoan;
+            header("Location: index.php");
         }
-        else{
+        else if($statuss == '0' || $status =='0'){
+            echo '<p style="text-align:center"> Tài khoản của bạn chưa được kích hoạt</p>';
+        }else{
             echo '<p style="text-align:center">Tài khoản hoặc mật khẩu không đúng, vui lòng nhập lại</p>';
         }
     }
@@ -26,48 +30,7 @@
         <!-- <link href="./css/styleadmin.css" rel="stylesheet"> -->
         <link href="./css/stylead2.css" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-        <title>Login Nike Sneaker</title>
-        <style>
-            .wapper_login {
-                width: 25%;
-                align-items: center;
-                margin: 16% auto;
-            }
-            h3{
-                /* margin: 5%; */
-                font-size: 24px;
-            }
-            table , th, td{
-                border-collapse: collapse;
-                border: 1px solid black;
-                border-radius: 12px;
-            }
-            table.table-login{
-                width:100%;
-            }
-            .table-login {
-                text-align: center;
-            }
-            table.table-login tr td{
-                padding: 5px;
-            }
-            .box_acc {
-                position: fixed;
-                
-                border: 1px solid black;
-                width: 8%;
-                right: 8%;
-                border-radius: 5px;
-                text-align: center;
-                display: none;
-            }
-            .wapper_losign {
-                width: 50%;
-                align-items: center;
-                
-                /* border-radius: 5px; */
-            }
-        </style>
+        <title>Login WebAdmin</title>
         <!-- <link href="" -->
     </head>
     <body>
@@ -75,10 +38,8 @@
             <form action="" method="POST" autocomplete="off">
                 <table class="table-login">
                     <tr>
-                        <td colspan="2" ><h1>Đăng nhập</h1>
-                        <p>Nike Sneaker</p></td>
+                        <td colspan="2" ><h1>Đăng nhập</h1></td>
                     </tr>
-                    
                     <tr>
                         <th style="font-size: 22px;">Tài khoản</th> 
                         <td><input  style="font-size: 20px;" type="text" name="username" required></td>
@@ -88,10 +49,10 @@
                         <td><input style="font-size: 20px;" type="password" name="password" required></td>
                     </tr>
                     <!-- <tr style ="float:right;">
-                        <td col="2" style="float:right; border: 0px;"><a  href="./logsign.php">Đăng ký</a></td>
+                        <td col="2" style="float:right; border: 0px;"><a  href="../webshop/logsign.php">Đăng ký</a></td>
                     </tr> -->
                     <tr>
-                        <td style="border-bottom:0;" colspan="2"><input style="font-size: 20px;" type="submit" name="dangnhapweb" value="Đăng nhập"></td>
+                        <td style="border-bottom:0;" colspan="2"><input style="font-size: 20px;" type="submit" name="dangnhap" value="Đăng nhập"></td>
                     </tr>
                 </table>
             </form>
